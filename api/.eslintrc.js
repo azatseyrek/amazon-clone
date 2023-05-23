@@ -24,5 +24,7 @@ module.exports = {
     // disable unused vars
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': 'off',
+    // disable spacing rule
+    '@typescript-eslint/indent': 'off',
   },
 };

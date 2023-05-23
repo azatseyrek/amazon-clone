@@ -2,7 +2,25 @@ POST http://localhost:3000/product
 Content-Type: application/json
 
 {
-    "name": "Water",
-    "price" : 700
+    "name": "Iphone 11",
+    "price" : 1100,
+    "description" : "Iphone 11 64GB",
 }
 
+###Get all products
+GET http://localhost:3000/product
+
+###Get product by id
+GET http://localhost:3000/product/646b732cd13985e400d5d725
+
+###Update product by id
+
+PATCH   http://localhost:3000/product/646b5dbfe22c63128940ceb6
+Content-Type: application/json
+
+{
+   "name" : "Iphone 12"
+}
+
+###Delete product by id
+DELETE    http://localhost:3000/product/646b732cd13985e400d5d725
