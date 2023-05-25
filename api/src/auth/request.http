@@ -1,0 +1,22 @@
+POST http://localhost:3000/api/auth/register
+Content-Type: application/json
+
+{
+    "name": "test",
+    "email" : "test@test.com",
+    "password" : "123123"
+}
+
+### Login
+
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+    "email" : "test@seyrek.com",
+    "password" : "123123"
+}
+
+### Get User
+
+GET http://localhost:3000/api/user/646f1bdfe4adaba9c97f08e2
