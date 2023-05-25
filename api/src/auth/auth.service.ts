@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpCode, Injectable } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
 
 import * as bcrypt from 'bcrypt';
@@ -54,9 +54,11 @@ export class AuthService {
     existingUser: ExistingUserDTO,
   ): Promise<{ token: string | null }> {
     const { email, password } = existingUser;
+
     const user = await this.validateUser(email, password);
     if (!user) return { token: null };
 
+    // genereate jwt token
     const jwt = await this.jwtService.signAsync({ user });
 
     return { token: jwt };

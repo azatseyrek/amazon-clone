@@ -1,21 +1,23 @@
-POST http://localhost:3000/product
+POST http://localhost:3000/api/product
 Content-Type: application/json
 
 {
-    "name": "Iphone 11",
+    "name": "Iphone 15",
     "price" : 1100,
-    "description" : "Iphone 11 64GB",
+    "description" : "Iphone 11 64GB"
 }
 
 ###Get all products
-GET http://localhost:3000/product
+GET http://localhost:3000/api/product
 
 ###Get product by id
-GET http://localhost:3000/product/646b732cd13985e400d5d725
+GET http://localhost:3000/api/product/646f1e69a47478d138990f70
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ2Y2QxNjEwYWM2NTYxYzMzOGNjZmJjIiwibmFtZSI6InRlc3QiLCJlbWFpbCI6InRlc3RAc2V5cmVrLmNvbSJ9LCJpYXQiOjE2ODUwMDQwODAsImV4cCI6MTY4NTAwNzY4MH0.zC9PmE6e0QjxWFZZd1XG19z8Srd_XOa4E-k_rtCpSrE
+
 
 ###Update product by id
 
-PATCH   http://localhost:3000/product/646b5dbfe22c63128940ceb6
+PATCH   http://localhost:3000/api/product/646b5dbfe22c63128940ceb6
 Content-Type: application/json
 
 {
@@ -23,4 +25,4 @@ Content-Type: application/json
 }
 
 ###Delete product by id
-DELETE    http://localhost:3000/product/646b732cd13985e400d5d725
+DELETE    http://localhost:3000/api/product/646b732cd13985e400d5d725

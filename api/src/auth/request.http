@@ -3,7 +3,7 @@ Content-Type: application/json
 
 {
     "name": "test",
-    "email" : "test@seyrek.com",
+    "email" : "test@test.com",
     "password" : "123123"
 }
 
@@ -16,3 +16,7 @@ Content-Type: application/json
     "email" : "test@seyrek.com",
     "password" : "123123"
 }
+
+### Get User
+
+GET http://localhost:3000/api/user/646f1bdfe4adaba9c97f08e2
