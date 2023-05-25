@@ -1,17 +1,17 @@
-import { HttpCode, Injectable } from '@nestjs/common';
-import { UserService } from 'src/user/user.service';
+import { HttpCode, Injectable } from "@nestjs/common";
+import { UserService } from "src/user/user.service";
 
-import * as bcrypt from 'bcrypt';
-import { NewUserDTO } from 'src/user/dtos/new-user.dto';
-import { UserDetails } from 'src/user/user-detail.interface';
-import { ExistingUserDTO } from 'src/user/dtos/existin-user.dto';
-import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from "bcrypt";
+import { NewUserDTO } from "src/user/dtos/new-user.dto";
+import { UserDetails } from "src/user/user-detail.interface";
+import { ExistingUserDTO } from "src/user/dtos/existin-user.dto";
+import { JwtService } from "@nestjs/jwt";
 
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UserService,
-    private readonly jwtService: JwtService,
+    private readonly jwtService: JwtService
   ) {}
 
   async hashPassword(password: string): Promise<string> {
@@ -23,7 +23,7 @@ export class AuthService {
 
     const existingUser = await this.userService.findByEmail(email);
 
-    if (existingUser) return 'Email already exists';
+    if (existingUser) return "Email already exists";
     const hashedPassword = await this.hashPassword(password);
     const newUser = await this.userService.create(name, email, hashedPassword);
     return this.userService._getUserDetails(newUser);
@@ -31,27 +31,27 @@ export class AuthService {
 
   async doesPasswordMatch(
     password: string,
-    hashedPassword: string,
+    hashedPassword: string
   ): Promise<boolean> {
     return await bcrypt.compare(password, hashedPassword);
   }
 
   async validateUser(
     email: string,
-    password: string,
+    password: string
   ): Promise<UserDetails | null> {
     const user = await this.userService.findByEmail(email);
     if (!user) return null;
     const isPasswordMatching = await this.doesPasswordMatch(
       password,
-      user.password,
+      user.password
     );
     if (!isPasswordMatching) return null;
     return this.userService._getUserDetails(user);
   }
 
   async login(
-    existingUser: ExistingUserDTO,
+    existingUser: ExistingUserDTO
   ): Promise<{ token: string | null }> {
     const { email, password } = existingUser;
 
