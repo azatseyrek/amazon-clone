@@ -4,14 +4,94 @@ import { Button, Divider, Grid, InputLabel, TextField, Typography } from '@mui/m
 import { Box } from '@mui/system';
 import { Link } from 'react-router-dom';
 
+import { useInput } from '../../../hooks/inputs/use-input';
+
+import { validateEmail } from '../../..//shared/utils/validation/email';
+import {
+  validateNameLength,
+  validatePasswordLength,
+} from '../../../shared/utils/validation/length';
+
 const RegistrationFormComponent: FC = () => {
+  const {
+    text: name,
+    shouldDisplayError: nameHasError,
+    textChangeHandler: nameChangeHandler,
+    inputBlurHandler: nameBlurHandler,
+    clearHandler: nameClearHandler,
+  } = useInput(validateNameLength);
+
+  const {
+    text: email,
+    shouldDisplayError: emailHasError,
+    textChangeHandler: emailChangeHandler,
+    inputBlurHandler: emailBlurHandler,
+    clearHandler: emailClearHandler,
+  } = useInput(validateEmail);
+
+  const {
+    text: password,
+    shouldDisplayError: passwordHasError,
+    textChangeHandler: passwordChangeHandler,
+    inputBlurHandler: passwordBlurHandler,
+    clearHandler: passwordClearHandler,
+  } = useInput(validatePasswordLength);
+
+  const {
+    text: confirmPassword,
+    shouldDisplayError: confirmPasswordHasError,
+    textChangeHandler: confirmPasswordChangeHandler,
+    inputBlurHandler: confirmPasswordBlurHandler,
+    clearHandler: confirmPasswordClearHandler,
+  } = useInput(validatePasswordLength);
+
+  const clearForm = () => {
+    nameClearHandler();
+    emailClearHandler();
+    passwordClearHandler();
+    confirmPasswordClearHandler();
+  };
+
   const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('submitted');
+    if (password !== confirmPassword) {
+      return;
+    }
+
+    if (nameHasError || emailHasError || passwordHasError || confirmPasswordHasError) {
+      return;
+    }
+
+    if (
+      name.length === 0 ||
+      email.length === 0 ||
+      password.length === 0 ||
+      confirmPassword.length === 0
+    ) {
+      return;
+    }
+
+    const newUser = {
+      name,
+      email,
+      password,
+    };
+
+    console.log('New User', newUser);
+
+    clearForm();
   };
 
   return (
-    <Box sx={{ border: 1, padding: 2, borderColor: '#cccccc', width: '350px', marginTop: 2 }}>
+    <Box
+      sx={{
+        border: 1,
+        padding: 2,
+        borderColor: '#cccccc',
+        width: '350px',
+        marginTop: 2,
+      }}
+    >
       <form onSubmit={onSubmitHandler}>
         <Grid container direction="column" justifyContent="flex-start">
           <Typography variant="h4" component="h1">
@@ -20,15 +100,42 @@ const RegistrationFormComponent: FC = () => {
           <InputLabel sx={{ fontWeight: '500', marginTop: 1, color: '#000000' }} htmlFor="name">
             Your name
           </InputLabel>
-          <TextField type="text" name="name" id="name" variant="outlined" size="small" />
+          <TextField
+            value={name}
+            onChange={nameChangeHandler}
+            onBlur={nameBlurHandler}
+            error={nameHasError}
+            helperText={nameHasError ? 'Enter your name' : ''}
+            type="text"
+            name="name"
+            id="name"
+            variant="outlined"
+            size="small"
+          />
           <InputLabel sx={{ fontWeight: '500', marginTop: 1, color: '#000000' }} htmlFor="email">
             Email
           </InputLabel>
-          <TextField type="email" name="email" id="email" variant="outlined" size="small" />
+          <TextField
+            value={email}
+            onChange={emailChangeHandler}
+            onBlur={emailBlurHandler}
+            error={emailHasError}
+            helperText={emailHasError ? 'Enter your email' : ''}
+            type="email"
+            name="email"
+            id="email"
+            variant="outlined"
+            size="small"
+          />
           <InputLabel sx={{ fontWeight: '500', marginTop: 1, color: '#000000' }} htmlFor="password">
             Password
           </InputLabel>
           <TextField
+            value={password}
+            onChange={passwordChangeHandler}
+            onBlur={passwordBlurHandler}
+            error={passwordHasError}
+            helperText={passwordHasError ? 'Minimum 6 characters required' : ''}
             autoComplete="off"
             type="password"
             name="password"
@@ -37,11 +144,22 @@ const RegistrationFormComponent: FC = () => {
             size="small"
             placeholder="minimum 6 characters required"
           />
-          <InputLabel sx={{ fontWeight: '500', marginTop: 1, color: '#000000' }} htmlFor="confirmPassword">
+          <InputLabel
+            sx={{ fontWeight: '500', marginTop: 1, color: '#000000' }}
+            htmlFor="confirmPassword"
+          >
             Confirm Password
           </InputLabel>
           <TextField
-            autoComplete="off"
+            value={confirmPassword}
+            onChange={confirmPasswordChangeHandler}
+            onBlur={confirmPasswordBlurHandler}
+            error={confirmPassword.length > 0 && password !== confirmPassword}
+            helperText={
+              confirmPassword.length > 0 && password !== confirmPassword
+                ? 'Passwords must match'
+                : ''
+            }
             type="password"
             name="confirmPassword"
             id="confirmPassword"
@@ -73,12 +191,18 @@ const RegistrationFormComponent: FC = () => {
 
       <div>
         <small>
-          <a href="#" style={{ textDecoration: 'none' }}>
+          <a
+            href="https://www.amazon.com.tr/gp/help/customer/display.html/ref=ap_signin_notification_condition_of_use?ie=UTF8&nodeId=201909000"
+            style={{ textDecoration: 'none' }}
+          >
             {' '}
             Conditions of use
           </a>{' '}
           and{' '}
-          <a href="#" style={{ textDecoration: 'none' }}>
+          <a
+            href="https://www.amazon.com.tr/gp/help/customer/display.html/ref=ap_signin_notification_condition_of_use?ie=UTF8&nodeId=201909000"
+            style={{ textDecoration: 'none' }}
+          >
             Privacy policy
           </a>
         </small>
@@ -98,7 +222,10 @@ const RegistrationFormComponent: FC = () => {
       <div>
         <small>
           Buying for work?
-          <a href="#" style={{ textDecoration: 'none' }}>
+          <a
+            href="https://www.amazon.com.tr/gp/help/customer/display.html/ref=ap_signin_notification_condition_of_use?ie=UTF8&nodeId=201909000"
+            style={{ textDecoration: 'none' }}
+          >
             {' '}
             Create a free business acount
           </a>{' '}

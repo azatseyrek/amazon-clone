@@ -4,10 +4,47 @@ import { Button, Divider, Grid, InputLabel, TextField, Typography } from '@mui/m
 import { Box } from '@mui/system';
 import { Link } from 'react-router-dom';
 
+import useInput from '../../../hooks/inputs/use-input';
+
+import { validateEmail } from '../../../shared/utils/validation/email';
+import { validatePasswordLength } from '../../../shared/utils/validation/length';
+
 const SigninFormComponent: FC = () => {
+  const {
+    text: email,
+    shouldDisplayError: emailHasError,
+    textChangeHandler: emailChangeHandler,
+    inputBlurHandler: emailBlurHandler,
+    clearHandler: emailClearHandler,
+  } = useInput(validateEmail);
+
+  const {
+    text: password,
+    shouldDisplayError: passwordHasError,
+    textChangeHandler: passwordChangeHandler,
+    inputBlurHandler: passwordBlurHandler,
+    clearHandler: passwordClearHandler,
+  } = useInput(validatePasswordLength);
+
+  const clearForm = () => {
+    emailClearHandler();
+    passwordClearHandler();
+  };
+
   const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('submitted');
+
+    if (emailHasError || passwordHasError) {
+      return;
+    }
+
+    if (email.length === 0 || password.length === 0) {
+      return;
+    }
+
+    console.log(email, password);
+
+    clearForm();
   };
 
   return (
@@ -31,11 +68,11 @@ const SigninFormComponent: FC = () => {
               Email
             </InputLabel>
             <TextField
-              //   value={email}
-              //   onChange={emailChangeHandler}
-              //   onBlur={emailBlurHandler}
-              //   error={emailHasError}
-              //   helperText={emailHasError ? 'Enter your email' : ''}
+              value={email}
+              onChange={emailChangeHandler}
+              onBlur={emailBlurHandler}
+              error={emailHasError}
+              helperText={emailHasError ? 'Enter your email' : ''}
               type="email"
               name="email"
               id="email"
@@ -47,11 +84,11 @@ const SigninFormComponent: FC = () => {
               Password
             </InputLabel>
             <TextField
-              //   value={password}
-              //   onChange={passwordChangeHandler}
-              //   onBlur={passwordBlurHandler}
-              //   error={passwordHasError}
-              //   helperText={passwordHasError ? 'Minimum 6 characters required' : ''}
+              value={password}
+              onChange={passwordChangeHandler}
+              onBlur={passwordBlurHandler}
+              error={passwordHasError}
+              helperText={passwordHasError ? 'Minimum 6 characters required' : ''}
               type="password"
               name="password"
               id="password"
@@ -63,7 +100,7 @@ const SigninFormComponent: FC = () => {
 
             <Button
               id="signin-btn"
-              //   disabled={!validatePasswordLength(password) || !validateEmail(email)}
+              disabled={!validatePasswordLength(password) || !validateEmail(email)}
               variant="contained"
               style={{
                 marginTop: '16px',
@@ -88,12 +125,18 @@ const SigninFormComponent: FC = () => {
 
         <div>
           <small>
-            <a href="#" style={{ textDecoration: 'none' }}>
+            <a
+              href="https://www.amazon.com.tr/gp/help/customer/display.html/ref=ap_signin_notification_condition_of_use?ie=UTF8&nodeId=201909000"
+              style={{ textDecoration: 'none' }}
+            >
               {' '}
               Conditions of use
             </a>{' '}
             and{' '}
-            <a href="#" style={{ textDecoration: 'none' }}>
+            <a
+              href="https://www.amazon.com.tr/gp/help/customer/display.html/ref=ap_signin_notification_condition_of_use?ie=UTF8&nodeId=201909000"
+              style={{ textDecoration: 'none' }}
+            >
               Privacy policy
             </a>
           </small>
@@ -104,7 +147,11 @@ const SigninFormComponent: FC = () => {
           <small style={{ color: '#767676' }}>New to Amazon?</small>
         </Divider>
 
-        <Link id="register-link" to="/register" style={{ textDecoration: 'none', color: '#0000ee' }}>
+        <Link
+          id="register-link"
+          to="/register"
+          style={{ textDecoration: 'none', color: '#0000ee' }}
+        >
           <Button
             variant="contained"
             style={{
