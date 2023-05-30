@@ -1,4 +1,4 @@
-POST http://localhost:3000/api/auth/register
+POST http://localhost:5050/api/auth/register
 Content-Type: application/json
 
 {
@@ -9,7 +9,7 @@ Content-Type: application/json
 
 ### Login
 
-POST http://localhost:3000/api/auth/login
+POST http://localhost:5050/api/auth/login
 Content-Type: application/json
 
 {
@@ -19,4 +19,4 @@ Content-Type: application/json
 
 ### Get User
 
-GET http://localhost:3000/api/user/646f1bdfe4adaba9c97f08e2
+GET http://localhost:5050/api/user/646f1bdfe4adaba9c97f08e2
