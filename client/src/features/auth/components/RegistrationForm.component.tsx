@@ -1,16 +1,26 @@
-import { FC, FormEvent } from 'react';
+import { FC, FormEvent, useEffect } from 'react';
 
-import { Button, Divider, Grid, InputLabel, TextField, Typography } from '@mui/material';
+import {
+  Button,
+  CircularProgress,
+  Divider,
+  Grid,
+  InputLabel,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { Box } from '@mui/system';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { useInput } from '../../../hooks/inputs/use-input';
+import { useAppDispatch, useAppSelactor } from '../../../hooks/redux/hooks';
 
 import { validateEmail } from '../../..//shared/utils/validation/email';
 import {
   validateNameLength,
   validatePasswordLength,
 } from '../../../shared/utils/validation/length';
+import { register, reset } from '../authSlice';
 
 const RegistrationFormComponent: FC = () => {
   const {
@@ -45,12 +55,33 @@ const RegistrationFormComponent: FC = () => {
     clearHandler: confirmPasswordClearHandler,
   } = useInput(validatePasswordLength);
 
-  const clearForm = () => {
-    nameClearHandler();
-    emailClearHandler();
-    passwordClearHandler();
-    confirmPasswordClearHandler();
-  };
+  const dispatch = useAppDispatch();
+  const { isLoading, isSuccess, isError } = useAppSelactor((state) => state.auth);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const clearForm = () => {
+      nameClearHandler();
+      emailClearHandler();
+      passwordClearHandler();
+      confirmPasswordClearHandler();
+    };
+
+    if (isSuccess) {
+      dispatch(reset());
+      clearForm();
+      navigate('/signin');
+    }
+  }, [
+    isSuccess,
+    dispatch,
+    navigate,
+    nameClearHandler,
+    emailClearHandler,
+    passwordClearHandler,
+    confirmPasswordClearHandler,
+  ]);
 
   const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -77,10 +108,35 @@ const RegistrationFormComponent: FC = () => {
       password,
     };
 
-    console.log('New User', newUser);
-
-    clearForm();
+    dispatch(register(newUser));
   };
+
+  if (isLoading) {
+    return <CircularProgress sx={{ marginTop: '64px' }} color="primary" />;
+  }
+
+  if (isError) {
+    return (
+      <Box sx={{ marginTop: '64px' }}>
+        <Typography variant="h4" component="h1">
+          Something went wrong
+        </Typography>
+        <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
+        <Typography variant="body1" component="p">
+          Please try again later
+        </Typography>
+        <Button
+          sx={{ marginTop: 2 }}
+          variant="contained"
+          color="primary"
+          component={Link}
+          to="/register"
+        >
+          Try again
+        </Button>
+      </Box>
+    );
+  }
 
   return (
     <Box
@@ -165,6 +221,7 @@ const RegistrationFormComponent: FC = () => {
             id="confirmPassword"
             variant="outlined"
             size="small"
+            autoComplete="off"
           />
           <Button
             id="register-btn"
