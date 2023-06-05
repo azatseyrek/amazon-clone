@@ -4,12 +4,12 @@ import { useNavigate } from 'react-router';
 
 import { useAppDispatch, useAppSelector } from '../hooks/redux/hooks';
 
-import { logout } from '../features/auth/authSlice';
+import { logout, selectedUser } from '../features/auth/authSlice';
 
 const HomePage = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const { user } = useAppSelector((state) => state.auth);
+
+  const { user } = useAppSelector(selectedUser);
 
   const logoutHandler = () => {
     dispatch(logout());
