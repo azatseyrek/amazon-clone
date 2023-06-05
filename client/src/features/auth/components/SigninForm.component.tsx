@@ -1,13 +1,24 @@
-import { FC, FormEvent } from 'react';
+import { FC, FormEvent, useEffect } from 'react';
 
-import { Button, Divider, Grid, InputLabel, TextField, Typography } from '@mui/material';
+import {
+  Button,
+  CircularProgress,
+  Divider,
+  Grid,
+  InputLabel,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { Box } from '@mui/system';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import useInput from '../../../hooks/inputs/use-input';
+import { useAppDispatch, useAppSelector } from '../../../hooks/redux/hooks';
 
 import { validateEmail } from '../../../shared/utils/validation/email';
 import { validatePasswordLength } from '../../../shared/utils/validation/length';
+import { login, reset } from '../authSlice';
+import { LoginUser } from '../models/LoginUser.interface';
 
 const SigninFormComponent: FC = () => {
   const {
@@ -26,10 +37,27 @@ const SigninFormComponent: FC = () => {
     clearHandler: passwordClearHandler,
   } = useInput(validatePasswordLength);
 
-  const clearForm = () => {
-    emailClearHandler();
-    passwordClearHandler();
-  };
+  const dispatch = useAppDispatch();
+
+  const { isLoading, isSuccess, isAuthenticated } = useAppSelector((state) => state.auth);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const clearForm = () => {
+      emailClearHandler();
+      passwordClearHandler();
+    };
+    if (isSuccess) {
+      dispatch(reset());
+      clearForm();
+    }
+  }, [dispatch, emailClearHandler, isSuccess, navigate, passwordClearHandler]);
+
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    navigate('/');
+  }, [isAuthenticated, navigate]);
 
   const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -41,11 +69,17 @@ const SigninFormComponent: FC = () => {
     if (email.length === 0 || password.length === 0) {
       return;
     }
+    const loginUser: LoginUser = {
+      email,
+      password,
+    };
 
-    console.log(email, password);
-
-    clearForm();
+    dispatch(login(loginUser));
   };
+
+  if (isLoading) {
+    return <CircularProgress sx={{ marginTop: '64px' }} color="primary" />;
+  }
 
   return (
     <>

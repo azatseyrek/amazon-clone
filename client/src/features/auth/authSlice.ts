@@ -52,7 +52,7 @@ export const login = createAsyncThunk('auth/login', async (user: LoginUser, thun
 });
 
 export const logout = createAsyncThunk('auth/logout', async () => {
-  await authService.logout();
+  authService.logout();
 });
 
 export const verifyJwt = createAsyncThunk('auth/verify-jwt', async (jwt: string, thunkAPI) => {

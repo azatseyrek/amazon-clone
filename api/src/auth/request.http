@@ -20,3 +20,11 @@ Content-Type: application/json
 ### Get User
 
 GET http://localhost:5050/api/user/646f1bdfe4adaba9c97f08e2
+
+### verify jwt
+POST http://localhost:5050/api/auth/verify-jwt
+Content-Type: application/json
+
+{
+    "jwt" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ2Y2QxNjEwYWM2NTYxYzMzOGNjZmJjIiwibmFtZSI6InRlc3QiLCJlbWFpbCI6InRlc3RAc2V5cmVrLmNvbSJ9LCJpYXQiOjE2ODU2OTQ4MDcsImV4cCI6MTY4NTY5ODQwN30.6trDHqYgCYmNdBHQlTzgBN-hFDgSdT7EepJWT6tlqFA"
+}

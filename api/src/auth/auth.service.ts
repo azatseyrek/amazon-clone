@@ -23,7 +23,8 @@ export class AuthService {
 
     const existingUser = await this.userService.findByEmail(email);
 
-    if (existingUser) return "Email already exists";
+    if (existingUser)
+      throw new HttpException("User already exists", HttpStatus.UNAUTHORIZED);
     const hashedPassword = await this.hashPassword(password);
     const newUser = await this.userService.create(name, email, hashedPassword);
     return this.userService._getUserDetails(newUser);

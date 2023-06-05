@@ -10,7 +10,7 @@ import {
 } from "@nestjs/common";
 import { ProductService } from "./product.service";
 import { ProductDocument } from "./product.schema";
-import { JwtAuthGuard } from "src/auth/guards/jwt.guards";
+import { JwtGuard } from "src/auth/guards/jwt.guards";
 
 //localhost:3000/product
 @Controller("product")
@@ -21,7 +21,7 @@ export class ProductController {
   finAllProducts() {
     return this.ProductService.findAll();
   }
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtGuard)
   @Get(":id")
   findOneProduct(@Param("id") id: string) {
     return this.ProductService.findOne(id);

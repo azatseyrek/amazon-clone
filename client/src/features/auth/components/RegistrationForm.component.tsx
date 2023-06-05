@@ -13,7 +13,7 @@ import { Box } from '@mui/system';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { useInput } from '../../../hooks/inputs/use-input';
-import { useAppDispatch, useAppSelactor } from '../../../hooks/redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../../hooks/redux/hooks';
 
 import { validateEmail } from '../../..//shared/utils/validation/email';
 import {
@@ -56,7 +56,7 @@ const RegistrationFormComponent: FC = () => {
   } = useInput(validatePasswordLength);
 
   const dispatch = useAppDispatch();
-  const { isLoading, isSuccess, isError } = useAppSelactor((state) => state.auth);
+  const { isLoading, isSuccess, isError } = useAppSelector((state) => state.auth);
 
   const navigate = useNavigate();
 
