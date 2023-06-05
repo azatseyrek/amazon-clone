@@ -1,7 +1,3 @@
-import { useEffect } from 'react';
-
-import { useNavigate } from 'react-router';
-
 import { useAppDispatch, useAppSelector } from '../hooks/redux/hooks';
 
 import { logout, selectedUser } from '../features/auth/authSlice';
