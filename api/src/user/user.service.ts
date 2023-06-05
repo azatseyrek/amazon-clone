@@ -1,15 +1,15 @@
-import { InjectModel } from '@nestjs/mongoose';
-import { Injectable } from '@nestjs/common';
+import { InjectModel } from "@nestjs/mongoose";
+import { Injectable } from "@nestjs/common";
 
-import { Model } from 'mongoose';
-import { UserDetails } from './user-detail.interface';
-import { UserDocument } from './user.schema';
+import { Model } from "mongoose";
+import { UserDetails } from "./user-detail.interface";
+import { UserDocument } from "./user.schema";
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectModel('User')
-    private readonly userModel: Model<UserDocument>,
+    @InjectModel("User")
+    private readonly userModel: Model<UserDocument>
   ) {}
 
   _getUserDetails(user: UserDocument): UserDetails {
@@ -23,7 +23,7 @@ export class UserService {
   async create(
     name: string,
     email: string,
-    hashedPassword: string,
+    hashedPassword: string
   ): Promise<UserDocument> {
     const newUser = new this.userModel({
       name,

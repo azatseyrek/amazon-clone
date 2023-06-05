@@ -1,19 +1,19 @@
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { ProductDocument } from './product.schema';
-import { Model } from 'mongoose';
+import { Injectable } from "@nestjs/common";
+import { InjectModel } from "@nestjs/mongoose";
+import { ProductDocument } from "./product.schema";
+import { Model } from "mongoose";
 
 @Injectable()
 export class ProductService {
   constructor(
-    @InjectModel('Product')
-    private readonly productModel: Model<ProductDocument>,
+    @InjectModel("Product")
+    private readonly productModel: Model<ProductDocument>
   ) {}
 
   async create(
     name: string,
     price: number,
-    description?: string,
+    description?: string
   ): Promise<ProductDocument> {
     const newProduct = new this.productModel({ name, price, description });
     const result = await newProduct.save();
@@ -34,7 +34,7 @@ export class ProductService {
     id: string,
     name: string,
     price: number,
-    description?: string,
+    description?: string
   ): Promise<ProductDocument> {
     const result = await this.productModel
       .findByIdAndUpdate(id, { id, name, price, description })
@@ -44,6 +44,6 @@ export class ProductService {
 
   async delete(id: string): Promise<string> {
     const result = await this.productModel.findByIdAndDelete(id).exec();
-    return 'Deleted';
+    return "Deleted";
   }
 }
