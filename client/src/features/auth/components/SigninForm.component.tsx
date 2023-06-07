@@ -139,7 +139,9 @@ const SigninFormComponent: FC = () => {
               style={{
                 marginTop: '16px',
                 height: '31px',
-                backgroundColor: '#f0c14b',
+                backgroundColor: `${
+                  !validatePasswordLength(password) || !validateEmail(email) ? '#cccccc' : '#f0c14b'
+                }`,
                 color: 'black',
                 borderColor: '#a88734 #9c7e31 #846a29',
                 textTransform: 'none',
