@@ -1,4 +1,3 @@
-import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 
 import { DecodedJwt } from '../models/DecodedJwt.interface';
@@ -8,22 +7,41 @@ import { LoginUser } from '../models/LoginUser.interface';
 import { NewUser } from '../models/NewUser';
 
 const register = async (newUser: NewUser): Promise<DisplayUser | null> => {
-  const response = await axios.post(`${process.env.REACT_APP_BASE_API}/auth/register`, newUser);
+  const response = await fetch(`${process.env.REACT_APP_BASE_API}/auth/register`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(newUser),
+  });
 
-  return response.data;
-};
-//Promise returns payloadaction type
-const login = async (user: LoginUser): Promise<{ jwt: Jwt; user: DisplayUser | null }> => {
-  const response = await axios.post(`${process.env.REACT_APP_BASE_API}/auth/login`, user);
-
-  if (response.data) {
-    localStorage.setItem('jwt', JSON.stringify(response.data));
-
-    const decodedJwt: DecodedJwt = jwt_decode(response.data.token);
-    localStorage.setItem('user', JSON.stringify(decodedJwt.user));
-    return { jwt: response.data, user: decodedJwt.user };
+  if (response.ok) {
+    const data = await response.json();
+    return data;
+  } else {
+    return null;
   }
-  return { jwt: response.data, user: null };
+};
+
+const login = async (user: LoginUser): Promise<{ jwt: Jwt; user: DisplayUser | null }> => {
+  const response = await fetch(`${process.env.REACT_APP_BASE_API}/auth/login`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(user),
+  });
+
+  if (response.ok) {
+    const data = await response.json();
+    localStorage.setItem('jwt', JSON.stringify(data));
+
+    const decodedJwt: DecodedJwt = jwt_decode(data.token);
+    localStorage.setItem('user', JSON.stringify(decodedJwt.user));
+    return { jwt: data, user: decodedJwt.user };
+  } else {
+    return { jwt: null, user: null };
+  }
 };
 
 const logout = (): void => {
@@ -32,14 +50,21 @@ const logout = (): void => {
 };
 
 const verifyJwt = async (jwt: string): Promise<boolean> => {
-  const response = await axios.post(`${process.env.REACT_APP_BASE_API}/auth/verify-jwt`, { jwt });
+  const response = await fetch(`${process.env.REACT_APP_BASE_API}/auth/verify-jwt`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ jwt }),
+  });
 
-  if (response.data) {
-    const jwtExpirationMs = response.data.exp * 1000; // convert to milliseconds
-    return jwtExpirationMs > Date.now(); 
+  if (response.ok) {
+    const data = await response.json();
+    const jwtExpirationMs = data.exp * 1000; // convert to milliseconds
+    return jwtExpirationMs > Date.now();
+  } else {
+    return false;
   }
-
-  return false;
 };
 
 const authService = {
