@@ -7,6 +7,7 @@ import SigninPage from './pages/Signin.page';
 
 import PrivateRoute from './features/auth/components/PrivateRoute';
 import { theme } from './shared/utils/theme';
+import store from './store';
 
 function App() {
   return (
@@ -21,6 +22,16 @@ function App() {
       </Router>
     </ThemeProvider>
   );
+}
+
+type CypressWindow = Window & typeof globalThis & { Cypress: any; store: any };
+
+const thisWindow = window as CypressWindow;
+
+if (thisWindow.Cypress) {
+  console.log('Cypress detected');
+
+  thisWindow.store = store;
 }
 
 export default App;
