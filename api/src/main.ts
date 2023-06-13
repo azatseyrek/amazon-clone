@@ -5,7 +5,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   // frontend to be able to access the backend api
-  app.enableCors({ origin: "http://localhost:3000" }); //4200 is the port of the frontend
+  app.enableCors({ origin: ["http://localhost:3001"] }); //4200 is the port of the frontend
 
   app.setGlobalPrefix("api"); //this is the prefix for all the routes in the backend api (localhost:3000/api/product)
 
